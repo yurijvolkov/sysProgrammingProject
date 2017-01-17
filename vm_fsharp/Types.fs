@@ -1,22 +1,35 @@
 ﻿module Types
+    /// <summary>
+    /// Supported types
+    /// </summary>
     type Type = 
-        Int32 = 0
-        |Double = 1
+        Int32 = 0uy
+        |Double = 1uy
         
+    /// <summary>
+    /// Describe function
+    /// </summary>
     type Function =  {
-        id : int
-        nameId : int;
-        argsCount : int;
-        localsCount : int;
-        returnType : Type;
-        code : byte list
+        fileId : int64
+        nameId : int64
+        localsCount : int64
+        flags : int64
+        argsCount : int64
+        args : byte []
+        byteCodeSize : int64
+        code : byte []
     }
 
+    /// <summary>
+    /// Describe program that currently executing
+    /// 'stringPool' : (fileId, stringNumber, string)
+    /// </summary>
     type Program = {
         functions : Function list
-        stringPool : string list
+        stringPool : (int64 * int64 * string) list 
     }
 
+    
     module Stack = 
         type 'a stack = 'a list
         let head = function 
@@ -28,9 +41,13 @@
             |h::t -> Some(t)
         let empty = []
 
+    /// <summary>
+    /// Describe virtual machine than currently 
+    /// executing
+    /// </summary>
     type VM = {
         dataStack : Stack.stack<int>;
-        instrNumber : int
         program : Program
-    }
+    } 
+
 

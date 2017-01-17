@@ -6,19 +6,12 @@ open System.Reflection
 open Types
 open System.IO
 open Loader
+open Funcs
 
-    
+
 [<EntryPoint>]
 let main argv = 
-    let fs = new FileStream("tests/call.dwc", FileMode.Open)
-    let br = new BinaryReader(fs) 
-    br.ReadBytes(10) |> ignore
-    let count = br.ReadInt64()
-    
-    printfn "%d" (getVersion fs)
-    printfn "%b" (checkFileSignature fs)
-    printfn "%d" count
-    for x in (getStringPool fs) do
-        printfn "%s" x 
-    
+    let files = ["tests/call.dwc"; "tests/print.dwc"];
+    let vm_prog = vmProgInit files
+    let main = getFuncByName vm_prog "main"
     0 // возвращение целочисленного кода выхода
