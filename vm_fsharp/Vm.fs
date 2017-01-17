@@ -12,6 +12,6 @@ open Funcs
 [<EntryPoint>]
 let main argv = 
     let files = ["tests/call.dwc"; "tests/print.dwc"];
-    let vm_prog = vmProgInit files
-    let main = getFuncByName vm_prog "main"
+    let vm = vmInit files
+    printfn "%A" vm
     0 // возвращение целочисленного кода выхода

@@ -4,6 +4,7 @@ open System.IO
 open System
 open Types
 
+
 /// <summary>
 /// Contains offsets for some elements (but not all) in byte code
 /// </summary>
@@ -51,7 +52,7 @@ let getBytes (fs : FileStream) (offset : int64) (count : int) =
     let br = new BinaryReader(fs)
     let value = br.ReadBytes(count)
     fs.Seek(curPos, SeekOrigin.Begin) |> ignore
-    value
+    Array.toList value
 
 /// <summary>
 /// Read and return 8byte number from 'fs' with given offset 
@@ -183,10 +184,25 @@ let parseFiles files =
     let res = _parseFiles files ([],[]) 0L
     (fst res, List.rev(snd res) )
        
-let vmProgInit files =
-    let parse = parseFiles files
-    {functions= fst parse;
-    stringPool=snd parse}
 
-let vmInit vmProg main = 
-    {dataStack=Stack.empty; instrNumber=main; program=vmProg}
+let fst3 = function 
+    |(a,b,c) -> a
+let snd3 = function
+    |(a,b,c) -> b
+let thd3 = function
+    |(a,b,c) -> c
+
+let vmCtxInit func =
+    {command=func.code; func=func; locals=[||]}
+
+let getStr pool fileId nameId =
+    let s = List.find( fun s -> fst3 s = fileId && snd3 s = nameId ) pool
+    thd3 s
+
+let vmInit files = 
+    let parse = parseFiles files
+    let functions = fst parse
+    let pool = snd parse
+    let main = List.find (fun f -> getStr pool f.fileId f.nameId = "main" ) functions
+    {context=[vmCtxInit main]; dataStack=Stack.empty;
+     stringPool=pool; functions=functions}

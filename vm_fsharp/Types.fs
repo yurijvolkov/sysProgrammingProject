@@ -15,21 +15,12 @@
         localsCount : int64
         flags : int64
         argsCount : int64
-        args : byte []
+        args : byte list
         byteCodeSize : int64
-        code : byte []
+        code : byte list
     }
 
-    /// <summary>
-    /// Describe program that currently executing
-    /// 'stringPool' : (fileId, stringNumber, string)
-    /// </summary>
-    type Program = {
-        functions : Function list
-        stringPool : (int64 * int64 * string) list 
-    }
 
-    
     module Stack = 
         type 'a stack = 'a list
         let head = function 
@@ -41,13 +32,20 @@
             |h::t -> Some(t)
         let empty = []
 
+    type VmCtx = {
+        command : byte list;
+        func : Function;
+        locals : int64[];
+    }
+
     /// <summary>
     /// Describe virtual machine than currently 
     /// executing
     /// </summary>
-    type VM = {
+    type Vm = {
+        context : VmCtx list;
         dataStack : Stack.stack<int>;
-        program : Program
-    } 
-
-
+        stringPool : (int64 * int64 * string) list ;
+        functions : Function list;
+     } 
+    
