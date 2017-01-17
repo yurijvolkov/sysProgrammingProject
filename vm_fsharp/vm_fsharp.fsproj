@@ -48,7 +48,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="Program.fs" />
+    <Compile Include="Loader.fs" />
+    <Compile Include="Types.fs" />
+    <Compile Include="Vm.fs" />
     <None Include="App.config" />
   </ItemGroup>
   <PropertyGroup>
