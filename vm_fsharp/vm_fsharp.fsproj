@@ -51,6 +51,7 @@
     <Compile Include="Types.fs" />
     <Compile Include="Funcs.fs" />
     <Compile Include="Loader.fs" />
+    <Compile Include="Exec.fs" />
     <Compile Include="Vm.fs" />
     <None Include="App.config" />
   </ItemGroup>
