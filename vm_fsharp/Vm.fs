@@ -13,7 +13,5 @@ open Exec
 let main argv = 
     let files = [ "tests/2nd.dwc"];
     let vm = vmInit files
-    //printfn "%A" vm
-    //printfn "%A" (List.length vm.context.Head.command)
     execute vm
-    0 // возвращение целочисленного кода выхода
+    0 
