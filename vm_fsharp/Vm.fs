@@ -11,8 +11,9 @@ open Exec
 
 [<EntryPoint>]
 let main argv = 
-    let files = ["tests/1st.dwc"; "tests/2nd.dwc"];
+    let files = [ "tests/2nd.dwc"];
     let vm = vmInit files
-    printfn "%A" vm
+    //printfn "%A" vm
+    //printfn "%A" (List.length vm.context.Head.command)
     execute vm
     0 // возвращение целочисленного кода выхода

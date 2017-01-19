@@ -193,7 +193,7 @@ let thd3 = function
     |(a,b,c) -> c
 
 let vmCtxInit func =
-    {command=func.code; func=func; locals=[||]}
+    {command=func.code; func=func; locals=Array.zeroCreate (int func.localsCount)}
 
 let getStr pool fileId nameId =
     let s = List.find( fun s -> fst3 s = fileId && snd3 s = nameId ) pool

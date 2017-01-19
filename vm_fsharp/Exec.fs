@@ -63,18 +63,18 @@ let rec execute (vm : Vm) =
             let ctx = {command=tail h.command; func=h.func; locals=h.locals}
             execute {context=ctx::t; dataStack=dataStack; stringPool=vm.stringPool;functions=vm.functions}
         | Commands.IPRINT -> 
-            printfn "%i" ((Stack.head vm.dataStack).Value.ToInt32())
+            printf "%i" ((Stack.head vm.dataStack).Value.ToInt32())
             let ctx = {command=tail h.command; func=h.func; locals=h.locals}
-            execute {context=ctx::t; dataStack=vm.dataStack; stringPool=vm.stringPool; functions=vm.functions}
+            execute {context=ctx::t; dataStack=Stack.pop vm.dataStack; stringPool=vm.stringPool; functions=vm.functions}
         | Commands.DPRINT ->
-            printfn "%f" ((Stack.head vm.dataStack).Value.ToDouble())
+            printf "%f" ((Stack.head vm.dataStack).Value.ToDouble())
             let ctx = {command=tail h.command; func=h.func; locals=h.locals}
-            execute {context=ctx::t; dataStack=vm.dataStack; stringPool=vm.stringPool; functions=vm.functions}
+            execute {context=ctx::t; dataStack=Stack.pop vm.dataStack; stringPool=vm.stringPool; functions=vm.functions}
         | Commands.SPRINT -> 
             let ptr = (Stack.head vm.dataStack).Value.ToStrPtr()
-            printfn "%s" (getStr vm.stringPool (int64 (fst ptr)) (int64 (snd ptr))) 
+            printf "%s" (getStr vm.stringPool (int64 (fst ptr)) (int64 (snd ptr))) 
             let ctx = {command=tail h.command; func=h.func; locals=h.locals}
-            execute {context=ctx::t; dataStack=vm.dataStack; stringPool=vm.stringPool; functions=vm.functions}
+            execute {context=ctx::t; dataStack=Stack.pop vm.dataStack; stringPool=vm.stringPool; functions=vm.functions}
         | Commands.SWAP ->
             let arg1 = VmValue.Cons (BitConverter.GetBytes((Stack.head vm.dataStack).Value.ToDouble()))
             let arg2 = VmValue.Cons (BitConverter.GetBytes((Stack.head(Stack.pop vm.dataStack)).Value.ToDouble()))
@@ -85,10 +85,10 @@ let rec execute (vm : Vm) =
             let dataStack = Stack.pop vm.dataStack
             let ctx = {command=tail h.command; func=h.func; locals=h.locals}
             execute {context=ctx::t; dataStack=dataStack; stringPool=vm.stringPool; functions=vm.functions}
-        | Commands.LOADVAR ->
+        | Commands.LOADVAR | Commands.LOADSVAR ->
             let split = List.splitAt 8 (tail h.command)
             let varId = BitConverter.ToInt32(List.toArray(fst split), 0)
-            let dataStack = Stack.push vm.dataStack (VmValue.Cons (BitConverter.GetBytes(h.locals.[varId].ToDouble())))
+            let dataStack = Stack.push vm.dataStack (h.locals.[varId])
             let ctx = {command=snd split; func=h.func;locals=h.locals}
             execute {context=ctx::t; dataStack=dataStack; stringPool=vm.stringPool; functions=vm.functions}
         | Commands.STOREVAR ->
@@ -98,7 +98,105 @@ let rec execute (vm : Vm) =
             h.locals.[varId] <- (Stack.head vm.dataStack).Value
             let ctx = {command=snd split; func=h.func;locals=h.locals}
             execute {context=ctx::t; dataStack=dataStack; stringPool=vm.stringPool; functions=vm.functions}        
+        | Commands.DCMP | Commands.ICMP ->
+            let res = match command with
+                | Commands.DCMP ->
+                    let arg1 = (Stack.head vm.dataStack).Value.ToDouble()
+                    let arg2 = (Stack.head (Stack.pop vm.dataStack)).Value.ToDouble()
+                    match arg1 - arg2 with
+                        |v when v>0. -> 1
+                        |v when v<0. -> -1
+                        |0. -> 0
+                | Commands.ICMP ->
+                    let arg1 = (Stack.head vm.dataStack).Value.ToInt32()
+                    let arg2 = (Stack.head (Stack.pop vm.dataStack)).Value.ToInt32()
+                    match arg1 - arg2 with
+                        |v when v>0 -> 1
+                        |v when v<0 -> -1
+                        |0 -> 0
+            let dataStack = Stack.push (Stack.pop2 vm.dataStack) (VmValue.Cons (BitConverter.GetBytes(res)))
+            let ctx = {command=tail h.command; func=h.func; locals=h.locals}
+            execute {context=ctx::t; dataStack=dataStack; stringPool=vm.stringPool; functions=vm.functions}
+        | Commands.JA   | 
+          Commands.JZI  | Commands.JNZI | Commands.JSI  | Commands.JNSI |
+          Commands.JMI  | Commands.JMEI | Commands.JLI  | Commands.JLEI |
+          Commands.JZD  | Commands.JNZD | Commands.JSD  | Commands.JNSD |
+          Commands.JMD  | Commands.JMED | Commands.JLD  | Commands.JLED  ->
+            let split = List.splitAt 8 (tail h.command)
+            let offset = BitConverter.ToInt32(List.toArray (fst split), 0)
+            let newPosition = (List.length h.func.code) -  (List.length (snd split)) + offset 
+            let isJump = match command with
+                | Commands.JA -> true
+                | Commands.JZI -> match (head vm.dataStack).ToInt32() with
+                    | 0 -> true
+                    | _ -> false
+                |  Commands.JNZI -> match (head vm.dataStack).ToInt32() with
+                    | 0 -> false
+                    | _ -> true
+                | Commands.JSI -> match (head vm.dataStack).ToInt32() with
+                    | v when v < 0 -> true
+                    | _ -> false
+                | Commands.JNSI -> match (head vm.dataStack).ToInt32() with
+                    | v when v >= 0 -> true
+                    | _ -> false
+                | Commands.JMI ->  match ((head vm.dataStack).ToInt32() - (head (Stack.pop vm.dataStack)).ToInt32()) with
+                    | v when v > 0 -> true
+                    | _ -> false
+                | Commands.JMEI ->  match ((head vm.dataStack).ToInt32() - (head (Stack.pop vm.dataStack)).ToInt32()) with
+                    | v when v >= 0 -> true
+                    | _ -> false
+                | Commands.JLI ->  match ((head vm.dataStack).ToInt32() - (head (Stack.pop vm.dataStack)).ToInt32()) with
+                    | v when v < 0 -> true
+                    | _ -> false
+                | Commands.JLEI ->  match ((head vm.dataStack).ToInt32() - (head (Stack.pop vm.dataStack)).ToInt32()) with
+                    | v when v <= 0 -> true
+                    | _ -> false
+                | Commands.JZD -> match (head vm.dataStack).ToDouble() with
+                    | 0. -> true
+                    | _ -> false
+                |  Commands.JNZD -> match (head vm.dataStack).ToDouble() with
+                    | 0. -> false
+                    | _ -> true
+                | Commands.JSD -> match (head vm.dataStack).ToDouble() with
+                    | v when v < 0. -> true
+                    | _ -> false
+                | Commands.JNSD -> match (head vm.dataStack).ToDouble() with
+                    | v when v >= 0. -> true
+                    | _ -> false
+                | Commands.JMD ->  match ((head vm.dataStack).ToDouble() - (head (Stack.pop vm.dataStack)).ToDouble()) with
+                    | v when v > 0. -> true
+                    | _ -> false
+                | Commands.JMED ->  match ((head vm.dataStack).ToDouble() - (head (Stack.pop vm.dataStack)).ToDouble()) with
+                    | v when v >= 0. -> true
+                    | _ -> false
+                | Commands.JLD ->  match ((head vm.dataStack).ToDouble() - (head (Stack.pop vm.dataStack)).ToDouble()) with
+                    | v when v < 0. -> true
+                    | _ -> false
+                | Commands.JLED ->  match ((head vm.dataStack).ToDouble() - (head (Stack.pop vm.dataStack)).ToDouble()) with
+                    | v when v <= 0. -> true
+                    | _ -> false
+                
+            let newCommand = match isJump with
+                | true ->  snd (List.splitAt newPosition h.func.code )
+                | false -> snd split
+            let ctx = {command=newCommand; func=h.func; locals=h.locals}
+            execute {context=ctx::t; dataStack=vm.dataStack; stringPool=vm.stringPool; functions=vm.functions}
+        | Commands.DUMP -> 
+            let value = head vm.dataStack
+            let dataStack = Stack.push vm.dataStack value
+            let ctx = {command=tail h.command; func=h.func;locals=h.locals}
+            execute {context=ctx::t; dataStack=dataStack; stringPool=vm.stringPool; functions=vm.functions}
         | Commands.STOP -> printfn "Execution was stoped : command STOP"
-        | _ -> ignore 1
+        | Commands.CALL ->
+            let split = List.splitAt 8 (tail h.command)
+            let fileId = int64 ((VmValue.Cons( List.toArray( fst (List.splitAt 4 (fst split))))).ToInt32())
+            let nameId = int64 (VmValue.Cons( List.toArray( snd (List.splitAt 4 (fst split)))).ToInt32())
+            let func = List.find (fun f -> f.fileId=fileId & f.nameId=nameId) vm.functions
+            let oldCtx = {command = snd split; func=h.func;locals=h.locals}
+            let newCtx = vmCtxInit func
+            execute {context=newCtx::oldCtx::t; dataStack=vm.dataStack; stringPool=vm.stringPool; functions=vm.functions}
+        | Commands.RETURN ->
+            execute {context=t; dataStack=vm.dataStack; stringPool=vm.stringPool; functions=vm.functions}
+        | _ -> printfn "Undefined command %s" (command.ToString())
         
 
