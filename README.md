@@ -13,7 +13,7 @@
   -  **Constants divided by \0**
 * **Functions count** : (8 bytes)
 * **Functions** :   
-  -  **Function name ID (from constan pool)** : (8 bytes)
+  -  **Function name ID (from constant pool)** : (8 bytes)
   -  **Local variables count** : (8 bytes)
   -  **Flags** : (8 bytes)
   -  **Count of args** : (8 bytes)
