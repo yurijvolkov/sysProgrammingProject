@@ -1,0 +1,68 @@
+BITS 64
+%include "dwarf_assembly.inc"
+
+FUNCTIONS_OFFSET
+
+STRINGS_COUNT 8
+db 'hello', 0
+db 'main', 0
+db 'func', 0
+db 'nu dopustim', 0
+db 'uuuuuuuuuh', 0
+db 'calculating : ', 0
+db 'result : ', 0
+db 10, 0
+
+FUNCTIONS_COUNT 1
+
+
+fibonacci:
+dq 2
+dq 2
+dq 0
+dq 1
+db 0
+dq .bc_end - .bc_start
+.bc_start:
+
+
+LOADS 5
+SPRINT
+DUMP
+IPRINT
+LOADS 7
+SPRINT 
+
+LOAD 1
+JLI 12
+POP
+POP
+LOAD 1
+RETURN
+ISUB
+INEG
+STOREVAR 0
+LOADVAR 0
+CALL 1,2
+STOREVAR 1
+LOADVAR 0
+LOAD 1
+ISUB
+INEG
+CALL 1, 2
+LOADVAR 1
+IADD
+RETURN
+
+.bc_end:
+
+
+
+
+
+
+
+
+
+
+

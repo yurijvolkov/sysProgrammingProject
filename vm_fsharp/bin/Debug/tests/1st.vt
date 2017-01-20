@@ -1,0 +1,94 @@
+BITS 64
+%include "dwarf_assembly.inc"
+
+FUNCTIONS_OFFSET
+
+STRINGS_COUNT 3
+db 'hello', 0
+db 'main', 0
+db 10, 0
+
+FUNCTIONS_COUNT 1
+
+fun_main:
+dq 1
+dq 0
+dq 0
+dq 0
+
+dq .bc_end - .bc_start
+.bc_start:
+
+LOAD 20.0
+LOAD 6.0
+DADD
+DPRINT
+
+LOAD 20.0
+LOAD 6.0
+DSUB
+DPRINT
+
+LOAD 20.0
+LOAD 6.0
+DMUL
+DPRINT
+
+LOAD 20.0
+LOAD 6.0
+DDIV
+DPRINT
+
+LOAD 10.
+DNEG
+DPRINT
+
+LOAD -12.
+DNEG
+DPRINT
+
+LOAD 10.
+D2I
+IPRINT
+
+LOAD 20
+LOAD 6
+IADD
+IPRINT
+
+LOAD 20
+LOAD 6
+ISUB
+IPRINT
+
+LOAD 20
+LOAD 6
+IMUL
+IPRINT
+
+LOAD 20
+LOAD 6
+IDIV
+IPRINT
+
+LOAD 10
+INEG
+IPRINT
+
+LOAD -12
+INEG
+IPRINT
+
+LOAD 90
+I2D 
+DPRINT
+
+LOADS 1
+S2I
+IPRINT
+
+
+STOP
+
+.bc_end:
+

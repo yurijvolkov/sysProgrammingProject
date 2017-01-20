@@ -1,0 +1,9 @@
+C:\Users\Yurij Volkov\Desktop\SysProject\vm_fsharp\vm_fsharp\bin\Debug\vm_fsharp.exe.config
+C:\Users\Yurij Volkov\Desktop\SysProject\vm_fsharp\vm_fsharp\bin\Debug\vm_fsharp.XML
+C:\Users\Yurij Volkov\Desktop\SysProject\vm_fsharp\vm_fsharp\bin\Debug\vm_fsharp.exe
+C:\Users\Yurij Volkov\Desktop\SysProject\vm_fsharp\vm_fsharp\bin\Debug\vm_fsharp.pdb
+C:\Users\Yurij Volkov\Desktop\SysProject\vm_fsharp\vm_fsharp\bin\Debug\FSharp.Core.dll
+C:\Users\Yurij Volkov\Desktop\SysProject\vm_fsharp\vm_fsharp\bin\Debug\FSharp.Core.xml
+C:\Users\Yurij Volkov\Desktop\SysProject\vm_fsharp\vm_fsharp\bin\Debug\ru\FSharp.Core.resources.dll
+C:\Users\Yurij Volkov\Desktop\SysProject\vm_fsharp\vm_fsharp\obj\Debug\vm_fsharp.exe
+C:\Users\Yurij Volkov\Desktop\SysProject\vm_fsharp\vm_fsharp\obj\Debug\vm_fsharp.pdb

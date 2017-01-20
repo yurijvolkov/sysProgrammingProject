@@ -1,0 +1,152 @@
+%define INVALID      db   0
+%macro LOAD 1
+db                        1
+dq %1
+%endmacro
+
+%macro LOADS 1
+db                        2
+dq %1
+%endmacro
+
+%define DADD         db   3
+%define IADD         db   4
+%define DSUB         db   5
+%define ISUB         db   6
+%define DMUL         db   7
+%define IMUL         db   8
+%define DDIV         db   9
+%define IDIV         db   10
+%define IMOD         db   11
+%define DNEG         db   12
+%define INEG         db   13
+%define IPRINT       db   14
+%define DPRINT       db   15
+%define SPRINT       db   16
+%define I2D          db   17
+%define D2I          db   18
+%define S2I          db   19
+%define SWAP         db   20
+%define POP          db   21
+%macro  LOADVAR 1 
+db			  22
+dq %1
+%endmacro
+
+%define LOADSVAR     db   23    
+%define LOADCTXVAR   db   24    
+%macro  STOREVAR 1     
+db			  25    
+dq %1
+%endmacro
+%define STORECTXVAR  db   26    
+%define DCMP         db   27
+%define ICMP         db   28
+%macro  JA 1          
+db   			  29
+dq %1
+%endmacro 
+
+%macro  JZI 1
+db                        30
+dq %1
+%endmacro
+%macro  JNZI 1
+db                        31
+dq %1
+%endmacro
+%macro  JSI 1
+db                        32
+dq %1
+%endmacro
+%macro  JNSI 1
+db                        33
+dq %1
+%endmacro
+%macro  JMI 1
+db                        34
+dq %1
+%endmacro
+%macro  JMEI 1
+db                        35
+dq %1
+%endmacro
+%macro  JLI 1
+db                        36
+dq %1
+%endmacro
+%macro  JLEI 1
+db                        37
+dq %1
+%endmacro
+
+%macro  JZD 1
+db                        38
+dq %1
+%endmacro
+%macro  JNZD 1
+db                        39
+dq %1
+%endmacro
+%macro  JSD 1
+db                        40
+dq %1
+%endmacro
+%macro  JNSD 1
+db                        41
+dq %1
+%endmacro
+%macro  JMD 1
+db                        42
+dq %1
+%endmacro
+%macro  JMED 1
+db                        43
+dq %1
+%endmacro
+%macro  JLD 1
+db                        44
+dq %1
+%endmacro
+%macro  JLED 1
+db                        45
+dq %1
+%endmacro
+
+
+%define DUMP         db   46
+%define STOP         db   47
+
+%macro  CALL 2
+db 48
+dd %1
+dd %2
+%endmacro
+
+%define RETURN       db   49
+%define BREAK        db   50
+
+
+
+db 0xba, 0xba
+dq 1
+
+%macro STRINGS_COUNT 1
+dq %1
+pool_start:
+%endmacro
+
+
+
+%macro FUNCTIONS_COUNT 1
+functions_start:
+dq %1
+%endmacro
+
+%macro FUNCTIONS_OFFSET 0
+dq functions_start
+%endmacro
+
+%define CODE_SIZE dq .bc_end - .bc_start
+%define CODE .bc_start:
+%define ENDCODE .bc_end:
