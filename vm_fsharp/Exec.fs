@@ -2,14 +2,14 @@
 
 open Types
 open Loader
+open HelpFuncs
+open Commands
 open System
 
-let head = function
-    |h::t -> h
-
-let tail = function
-    |h::t -> t
-
+/// <summary>
+/// Function executes next command of head-context from VM list of contexts
+/// </summary>
+/// <param name="vm">Virtual machine</param>
 let rec execute (vm : Vm) = 
     match vm with
     |{context=[]} -> ignore 1
@@ -191,7 +191,7 @@ let rec execute (vm : Vm) =
             let split = List.splitAt 8 (tail h.command)
             let fileId = int64 ((VmValue.Cons( List.toArray( fst (List.splitAt 4 (fst split))))).ToInt32())
             let nameId = int64 (VmValue.Cons( List.toArray( snd (List.splitAt 4 (fst split)))).ToInt32())
-            let func = List.find (fun f -> f.fileId=fileId & f.nameId=nameId) vm.functions
+            let func = List.find (fun f -> f.fileId=fileId && f.nameId=nameId) vm.functions
             let oldCtx = {command = snd split; func=h.func;locals=h.locals}
             let newCtx = vmCtxInit func
             execute {context=newCtx::oldCtx::t; dataStack=vm.dataStack; stringPool=vm.stringPool; functions=vm.functions}

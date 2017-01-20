@@ -48,8 +48,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
+    <Compile Include="Commands.fs" />
     <Compile Include="Types.fs" />
-    <Compile Include="Funcs.fs" />
+    <Compile Include="HelpFuncs.fs" />
     <Compile Include="Loader.fs" />
     <Compile Include="Exec.fs" />
     <Compile Include="Vm.fs" />

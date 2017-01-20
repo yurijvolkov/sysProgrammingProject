@@ -2,36 +2,16 @@
 
 open System.IO
 open System
+open HelpFuncs
 open Types
 
-
-/// <summary>
-/// Contains offsets for some elements (but not all) in byte code
-/// </summary>
-type ByteCodeOffsets = 
-    |SignatureOffset = 0L
-    |VersionOffset = 2L
-    |FunctionsStartOffset = 10L
-    |StringPoolCountOffset = 18L
-    |StringsOffset = 26L
-
-/// <summary>
-/// Contains offsets for some elements (but not all) in part
-/// of byte code which describes Function
-/// </summary>
-type FunctionElementsOffsets = 
-    |Name = 0L
-    |LocalsCount = 8L
-    |Flags = 16L
-    |ArgsCount = 24L
-    |ArgsTypes = 32L
 
 /// <summary>
 /// Read and return one byte from 'fs' with given offset 
 /// from the start of file 
 /// </summary>
-/// <param name="fs"></param>
-/// <param name="offset"></param>
+/// <param name="fs">Filestream to read from</param>
+/// <param name="offset">Offset from begin of stream</param>
 let getByte (fs : FileStream) (offset : int64) =
     let curPos = fs.Position
     fs.Seek(offset, SeekOrigin.Begin) |> ignore
@@ -43,9 +23,9 @@ let getByte (fs : FileStream) (offset : int64) =
 /// <summary>
 /// Read and return 'count' bytes from 'fs' with given offset
 /// </summary>
-/// <param name="fs"></param>
-/// <param name="offset"></param>
-/// <param name="count"></param>
+/// <param name="fs">Filestream to read from</param>
+/// <param name="offset">Offset from start of stream</param>
+/// <param name="count">Number of bytes to read</param>
 let getBytes (fs : FileStream) (offset : int64) (count : int) = 
     let curPos = fs.Position
     fs.Seek(offset, SeekOrigin.Begin) |> ignore
@@ -57,8 +37,8 @@ let getBytes (fs : FileStream) (offset : int64) (count : int) =
 /// <summary>
 /// Read and return 8byte number from 'fs' with given offset 
 /// </summary>
-/// <param name="fs"></param>
-/// <param name="offset"></param>
+/// <param name="fs">Filestream to read from</param>
+/// <param name="offset">Offset from begin of stream</param>
 let getInt64 (fs : FileStream) (offset : int64) =
     let curPos = fs.Position
     fs.Seek(offset, SeekOrigin.Begin) |> ignore
@@ -68,9 +48,9 @@ let getInt64 (fs : FileStream) (offset : int64) =
     value
 
 /// <summary>
-/// Returns are magic numbers ok
+/// Returns true if magic numbers ok
 /// </summary>
-/// <param name="fs"></param>
+/// <param name="fs">Filestream to read from</param>
 let checkFileSignature (fs : FileStream) = 
     let magics = [getByte fs (int64 ByteCodeOffsets.SignatureOffset) ;
                   getByte fs (int64 ByteCodeOffsets.SignatureOffset + 1L) ]
@@ -81,28 +61,28 @@ let checkFileSignature (fs : FileStream) =
 /// <summary>
 /// Returns version number of VM to load 
 /// </summary>
-/// <param name="fs"></param>
+/// <param name="fs">Filestream to read from</param>
 let getVersion (fs : FileStream) =
     getInt64 fs (int64 ByteCodeOffsets.VersionOffset)
 
 /// <summary>
 /// Returns offset where functions are
 /// </summary>
-/// <param name="fs"></param>
+/// <param name="fs">Filestream to read from</param>
 let getFunctionsOffset (fs : FileStream) =
     getInt64 fs (int64 ByteCodeOffsets.FunctionsStartOffset)
 
 /// <summary>
 /// Returns offset where sting pool starts
 /// </summary>
-/// <param name="fs"></param>
+/// <param name="fs">Filestream to read from</param>
 let getStringPoolCount (fs : FileStream) = 
     getInt64 fs (int64 ByteCodeOffsets.StringPoolCountOffset)
 
 /// <summary>
 /// Returns list contains all strings in pool
 /// </summary>
-/// <param name="fs"></param>
+/// <param name="fs">Filestream to read from</param>
 let getStringPool (fs : FileStream) (fileId : int64) = 
     let curPos = fs.Position
     fs.Seek(int64 ByteCodeOffsets.StringsOffset, SeekOrigin.Begin) |> ignore
@@ -123,7 +103,7 @@ let getStringPool (fs : FileStream) (fileId : int64) =
 /// <summary>
 /// Returns count of all functions in current program
 /// </summary>
-/// <param name="fs"></param>
+/// <param name="fs">Filestream to read from</param>
 let getFunctionsCount (fs : FileStream) = 
     let offset = getFunctionsOffset fs
     (getInt64 fs offset)
@@ -131,7 +111,7 @@ let getFunctionsCount (fs : FileStream) =
 /// <summary>
 /// Parse and returns function with current offset from 'fs'
 /// </summary>
-/// <param name="fs"></param>
+/// <param name="fs">Filestream to read frome</param>
 let getFunction (fs  : FileStream) (fileId : int64) =
     let nameId = getInt64 fs (int64 FunctionElementsOffsets.Name + fs.Position)
     let localsCount = getInt64 fs (int64 FunctionElementsOffsets.LocalsCount + fs.Position)
@@ -154,7 +134,7 @@ let getFunction (fs  : FileStream) (fileId : int64) =
 /// <summary>
 /// Returns all functions of correcponding program
 /// </summary>
-/// <param name="fs"></param>
+/// <param name="fs">Filestream to read from</param>
 let getFunctions (fs : FileStream) (fileId : int64) =
     let count = getFunctionsCount fs
     let curPos = fs.Position
@@ -171,7 +151,7 @@ let getFunctions (fs : FileStream) (fileId : int64) =
 /// Parse file into two parts : list of functions and string pool
 /// Returns tuple of them.
 /// </summary>
-/// <param name="files"></param>
+/// <param name="files">List of pathes to source files</param>
 let parseFiles files = 
     let rec _parseFiles files (curProg,curPool) fileId =
         match files with
@@ -185,20 +165,17 @@ let parseFiles files =
     (fst res, List.rev(snd res) )
        
 
-let fst3 = function 
-    |(a,b,c) -> a
-let snd3 = function
-    |(a,b,c) -> b
-let thd3 = function
-    |(a,b,c) -> c
-
+/// <summary>
+/// Initialize context with given function
+/// </summary>
+/// <param name="func">Function to use</param>
 let vmCtxInit func =
     {command=func.code; func=func; locals=Array.zeroCreate (int func.localsCount)}
 
-let getStr pool fileId nameId =
-    let s = List.find( fun s -> fst3 s = fileId && snd3 s = nameId ) pool
-    thd3 s
-
+/// <summary>
+/// Initialize virtual machine to execute one
+/// </summary>
+/// <param name="files">Files to read source code from</param>
 let vmInit files = 
     let parse = parseFiles files
     let functions = fst parse

@@ -1,82 +1,42 @@
 ﻿module Types
 
-
 open System
-    type Commands = 
-        |INVALID=0uy    //Invalid instruction
-        |LOAD=1uy       //Loads inlined value
-        |LOADS=2uy      //Loads inlined Id of string
-        |DADD=3uy       //Double addition
-        |IADD=4uy       //Int addition
-        |DSUB=5uy       //Double subtraction
-        |ISUB=6uy       //Int subtraction
-        |DMUL=7uy       //Double multiplication
-        |IMUL=8uy       //Int multiplication
-        |DDIV=9uy       //Double division
-        |IDIV=10uy      //Int division
-        |IMOD=11uy      //Modulo operation
-        |DNEG=12uy      //Negate double
-        |INEG=13uy      //Negate int
-        |IPRINT=14uy    //Pop and print integer on TOS
-        |DPRINT=15uy    //Pop and print double  on TOS
-        |SPRINT=16uy    //Pop and print string on TOS
-        |I2D=17uy       //Convert int on TOS to double
-        |D2I=18uy       //Convert double on Tos to int
-        |S2I=19uy       //Converts string pointer to int 
-        |SWAP=20uy      //Swap 2 topmost elements
-        |POP=21uy       //Remove value from TOS
-        |LOADVAR=22uy   //Load variable whose 4-byte Id is inlined 
-        |LOADSVAR=23uy  //Same as LOADVAR
-        |LOADCTXVAR=24uy
-        |STOREVAR=25uy  //Store value form TOS in variable whose 4-byte id is inlined
-        |STORECTXVAR=26uy
-        |DCMP=27uy      //Compares two doubles on TOS. if(arg1-arg2 !=0) then sign(arg1-arg2) else 0
-        |ICMP=28uy      //Compares two int's on TOS. if(arg1-arg2 !=0) then sign(arg1-arg2) else 0
-        |JA=29uy        //Jump for give 4-byte offset
-        |JZI=30uy       //Jump if Zero Integer
-        |JNZI=31uy      //Jump if Non-Zero Integer
-        |JSI=32uy       //Jump if Sign Integer
-        |JNSI=33uy      //Jump if Non-Sign Integer
-        |JMI=34uy       //Jump if TOS More than second Integer
-        |JMEI=35uy      //Jump if TOS More or Equal than second Integer
-        |JLI=36uy       //Jump if TOS Less than second Integer
-        |JLEI=37uy      //Jump if TOS Less or Equal than second Integer
-        |JZD=38uy       //Jump if Zero Double
-        |JNZD=39uy      //Jump if Non-Zero Double
-        |JSD=40uy       //Jump if Sign Double
-        |JNSD=41uy      //Jump if Non-Sign Double
-        |JMD=42uy       //Jump if TOS More than second Double
-        |JMED=43uy      //Jump if TOS More or Equal than second Double
-        |JLD=44uy       //Jump if TOS Less than second Double
-        |JLED=45uy      //Jump if TOS Less or Equal than second Double
-        |DUMP=46uy      //Dublicate TOS
-        |STOP=47uy      //Stops virtual machine
-        |CALL=48uy      //Call function with inlined 4bytes fileId, 4bytes nameId
-        |RETURN=49uy    //Return to call location
-        |BREAK=50uy
+open Commands
+    
     /// <summary>
-    /// Supported types
+    /// Supported types in virtual machine
+    /// Some of them not used by commands, but VmValue support
+    /// them, so it's easy to extend VM with commands with corresponding types
     /// </summary>
-    type Type = 
-        Int32 = 0uy
-        |Double = 1uy
-        
-        
+    type SupportedTypes = 
+        | Int16
+        | Int32
+        | Int64
+        | String
+        | Single 
+        | Double
+        | Boolean
+        | Char
+        | UInt16
+        | UInt32
+        | UInt64
+
     /// <summary>
     /// Describe function
     /// </summary>
     type Function =  {
-        fileId : int64
+        fileId : int64 
         nameId : int64
-        localsCount : int64
+        localsCount : int64 //count of local variables
         flags : int64
         argsCount : int64
-        args : byte list
+        args : byte list //types of args (Look : enum SupportedTypes)
         byteCodeSize : int64
         code : byte list
     }
     exception StackError of string
 
+    // Generic Stack
     module Stack = 
         type 'a stack = 'a list
         let head = function 
@@ -93,6 +53,9 @@ open System
 
         let empty = []
     
+    /// <summary>
+    /// Common value that used in VM
+    /// </summary>
     type VmValue = { arr : byte[] }
         with
             static member Cons (arr : byte[]) = {arr=arr} 
@@ -108,6 +71,11 @@ open System
             member v.ToUInt64() = BitConverter.ToUInt64(v.arr,0)
             member v.ToStrPtr() = (BitConverter.ToInt32(v.arr,0),
                                    BitConverter.ToInt32(v.arr,4))
+    
+    /// <summary>
+    /// Function context defines current state of execution :
+    /// local variables and list of commands to execute
+    /// </summary>
     type VmCtx = {
         command : byte list;
         func : Function;
@@ -121,7 +89,30 @@ open System
     type Vm = {
         context : VmCtx list;
         dataStack : Stack.stack<VmValue>;
-        stringPool : (int64 * int64 * string) list ;
+        stringPool : (int64 * int64 * string) list ; //(file Id * name Id * string)
         functions : Function list;
      } 
+
+     /// <summary>
+    /// Contains offsets for some elements (but not all) in byte code
+    /// </summary>
+    type ByteCodeOffsets = 
+        |SignatureOffset = 0L
+        |VersionOffset = 2L
+        |FunctionsStartOffset = 10L
+        |StringPoolCountOffset = 18L
+        |StringsOffset = 26L
+
+    /// <summary>
+    /// Contains offsets for some elements (but not all) in part
+    /// of byte code which describes Function
+    /// </summary>
+    type FunctionElementsOffsets = 
+        |Name = 0L
+        |LocalsCount = 8L
+        |Flags = 16L
+        |ArgsCount = 24L
+        |ArgsTypes = 32L
+
+
     
