@@ -26,7 +26,7 @@ To build virtual machine required : F# compiler (fsc)
 ```F#
  fsc --out:vm.exe --doc:doc.xml Commands.fs Types.fs HelpFuncs.fs Loader.fs Exec.fs Vm.fs
 ```
-###### Order of files is important!
+#### Order of files is important!
 ====
 ## Tests
 Tests are located in directory ***vm_fsharp/bin/Debug/tests***
@@ -37,7 +37,12 @@ Supported Makefile translates ****.vt*** into ****.vtc***
 
 Currently implemented :
 * Fibonaci recursive calculation : ***vm_fsharp/bin/Debug/tests/fib.vt****
-  
+
+===
+
+## Documentation
+XML documentation located in ***vm_fsharp/doc.xml***
+
 ## Type system :
 Current version contains commands to work with 3 types :
 - [X] Int32
