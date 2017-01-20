@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doc>
+<assembly><name>vm</name></assembly>
+<members>
+<member name="T:Commands.Commands">
+ <summary>
+ Commands supported by virtual machine
+ Some of them not implemented
+ </summary>
+</member>
+<member name="M:Exec.execute(Types.Vm)">
+ <summary>
+ Function executes next command of head-context from VM list of contexts
+ </summary>
+ <param name="vm">Virtual machine</param>
+</member>
+<member name="M:HelpFuncs.getStr``3(Microsoft.FSharp.Collections.FSharpList{System.Tuple{``0,``1,``2}},``0,``1)">
+ <summary>
+ Returns string from pool with given parameters : fileId and nameId
+ </summary>
+ <param name="pool">String pool</param>
+ <param name="fileId">File Id that contains string</param>
+ <param name="nameId">Id of string in file</param>
+</member>
+<member name="M:Loader.vmInit(Microsoft.FSharp.Collections.FSharpList{System.String})">
+ <summary>
+ Initialize virtual machine to execute one
+ </summary>
+ <param name="files">Files to read source code from</param>
+</member>
+<member name="M:Loader.vmCtxInit(Types.Function)">
+ <summary>
+ Initialize context with given function
+ </summary>
+ <param name="func">Function to use</param>
+</member>
+<member name="M:Loader.parseFiles(Microsoft.FSharp.Collections.FSharpList{System.String})">
+ <summary>
+ Parse file into two parts : list of functions and string pool
+ Returns tuple of them.
+ </summary>
+ <param name="files">List of pathes to source files</param>
+</member>
+<member name="M:Loader.getFunctions(System.IO.FileStream,System.Int64)">
+ <summary>
+ Returns all functions of correcponding program
+ </summary>
+ <param name="fs">Filestream to read from</param>
+</member>
+<member name="M:Loader.getFunction(System.IO.FileStream,System.Int64)">
+ <summary>
+ Parse and returns function with current offset from 'fs'
+ </summary>
+ <param name="fs">Filestream to read frome</param>
+</member>
+<member name="M:Loader.getFunctionsCount(System.IO.FileStream)">
+ <summary>
+ Returns count of all functions in current program
+ </summary>
+ <param name="fs">Filestream to read from</param>
+</member>
+<member name="M:Loader.getStringPool(System.IO.FileStream,System.Int64)">
+ <summary>
+ Returns list contains all strings in pool
+ </summary>
+ <param name="fs">Filestream to read from</param>
+</member>
+<member name="M:Loader.getStringPoolCount(System.IO.FileStream)">
+ <summary>
+ Returns offset where sting pool starts
+ </summary>
+ <param name="fs">Filestream to read from</param>
+</member>
+<member name="M:Loader.getFunctionsOffset(System.IO.FileStream)">
+ <summary>
+ Returns offset where functions are
+ </summary>
+ <param name="fs">Filestream to read from</param>
+</member>
+<member name="M:Loader.getVersion(System.IO.FileStream)">
+ <summary>
+ Returns version number of VM to load 
+ </summary>
+ <param name="fs">Filestream to read from</param>
+</member>
+<member name="M:Loader.checkFileSignature(System.IO.FileStream)">
+ <summary>
+ Returns true if magic numbers ok
+ </summary>
+ <param name="fs">Filestream to read from</param>
+</member>
+<member name="M:Loader.getInt64(System.IO.FileStream,System.Int64)">
+ <summary>
+ Read and return 8byte number from 'fs' with given offset 
+ </summary>
+ <param name="fs">Filestream to read from</param>
+ <param name="offset">Offset from begin of stream</param>
+</member>
+<member name="M:Loader.getBytes(System.IO.FileStream,System.Int64,System.Int32)">
+ <summary>
+ Read and return 'count' bytes from 'fs' with given offset
+ </summary>
+ <param name="fs">Filestream to read from</param>
+ <param name="offset">Offset from start of stream</param>
+ <param name="count">Number of bytes to read</param>
+</member>
+<member name="M:Loader.getByte(System.IO.FileStream,System.Int64)">
+ <summary>
+ Read and return one byte from 'fs' with given offset 
+ from the start of file 
+ </summary>
+ <param name="fs">Filestream to read from</param>
+ <param name="offset">Offset from begin of stream</param>
+</member>
+<member name="T:Types.FunctionElementsOffsets">
+ <summary>
+ Contains offsets for some elements (but not all) in part
+ of byte code which describes Function
+ </summary>
+</member>
+<member name="T:Types.ByteCodeOffsets">
+ <summary>
+ Contains offsets for some elements (but not all) in byte code
+ </summary>
+</member>
+<member name="T:Types.Vm">
+ <summary>
+ Describe virtual machine than currently 
+ executing
+ </summary>
+</member>
+<member name="T:Types.VmCtx">
+ <summary>
+ Function context defines current state of execution :
+ local variables and list of commands to execute
+ </summary>
+</member>
+<member name="T:Types.VmValue">
+ <summary>
+ Common value that used in VM
+ </summary>
+</member>
+<member name="T:Types.Function">
+ <summary>
+ Describe function
+ </summary>
+</member>
+<member name="T:Types.SupportedTypes">
+ <summary>
+ Supported types in virtual machine
+ Some of them not used by commands, but VmValue support
+ them, so it's easy to extend VM with commands with corresponding types
+ </summary>
+</member>
+</members>
+</doc>

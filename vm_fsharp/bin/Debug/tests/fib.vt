@@ -1,5 +1,5 @@
 BITS 64
-%include "dwarf_assembly.inc"
+%include "vt_asm_commands"
 
 FUNCTIONS_OFFSET
 
@@ -13,7 +13,27 @@ db 'calculating : ', 0
 db 'result : ', 0
 db 10, 0
 
-FUNCTIONS_COUNT 1
+FUNCTIONS_COUNT 2
+
+fun_main:
+dq 1
+dq 4
+dq 0
+dq 0
+dq .bc_end - .bc_start
+
+.bc_start:
+
+LOAD 6
+CALL 0, 2
+LOADS 6
+SPRINT
+IPRINT
+LOADS 7
+SPRINT
+RETURN
+
+.bc_end:
 
 
 fibonacci:
@@ -23,16 +43,15 @@ dq 0
 dq 1
 db 0
 dq .bc_end - .bc_start
-.bc_start:
 
+.bc_start:
 
 LOADS 5
 SPRINT
 DUMP
 IPRINT
 LOADS 7
-SPRINT 
-
+SPRINT
 LOAD 1
 JLI 12
 POP
@@ -43,26 +62,15 @@ ISUB
 INEG
 STOREVAR 0
 LOADVAR 0
-CALL 1,2
+CALL 0,2
 STOREVAR 1
 LOADVAR 0
 LOAD 1
 ISUB
 INEG
-CALL 1, 2
+CALL 0, 2
 LOADVAR 1
 IADD
 RETURN
 
 .bc_end:
-
-
-
-
-
-
-
-
-
-
-
