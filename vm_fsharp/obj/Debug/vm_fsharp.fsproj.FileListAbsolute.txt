@@ -7,3 +7,24 @@ C:\Users\Yurij Volkov\Desktop\SysProject\vm_fsharp\vm_fsharp\bin\Debug\FSharp.Co
 C:\Users\Yurij Volkov\Desktop\SysProject\vm_fsharp\vm_fsharp\bin\Debug\ru\FSharp.Core.resources.dll
 C:\Users\Yurij Volkov\Desktop\SysProject\vm_fsharp\vm_fsharp\obj\Debug\vm_fsharp.exe
 C:\Users\Yurij Volkov\Desktop\SysProject\vm_fsharp\vm_fsharp\obj\Debug\vm_fsharp.pdb
+C:\Users\yura2\Source\Repos\sysProgrammingProject\vm_fsharp\bin\Debug\vm_fsharp.XML
+C:\Users\yura2\Source\Repos\sysProgrammingProject\vm_fsharp\obj\Debug\vm_fsharp.exe
+C:\Users\yura2\Source\Repos\sysProgrammingProject\vm_fsharp\obj\Debug\vm_fsharp.pdb
+C:\Users\yura2\Source\Repos\sysProgrammingProject\vm_fsharp\bin\Debug\vm_fsharp.exe.config
+C:\Users\yura2\Source\Repos\sysProgrammingProject\vm_fsharp\bin\Debug\vm_fsharp.exe
+C:\Users\yura2\Source\Repos\sysProgrammingProject\vm_fsharp\bin\Debug\vm_fsharp.pdb
+C:\Users\yura2\Source\Repos\sysProgrammingProject\vm_fsharp\bin\Debug\FSharp.Build.dll
+C:\Users\yura2\Source\Repos\sysProgrammingProject\vm_fsharp\bin\Debug\FSharp.Compiler.dll
+C:\Users\yura2\Source\Repos\sysProgrammingProject\vm_fsharp\bin\Debug\FSharp.Compiler.Interactive.Settings.dll
+C:\Users\yura2\Source\Repos\sysProgrammingProject\vm_fsharp\bin\Debug\System.ValueTuple.dll
+C:\Users\yura2\Source\Repos\sysProgrammingProject\vm_fsharp\bin\Debug\Microsoft.Build.Utilities.Core.dll
+C:\Users\yura2\Source\Repos\sysProgrammingProject\vm_fsharp\bin\Debug\Microsoft.Build.Tasks.Core.dll
+C:\Users\yura2\Source\Repos\sysProgrammingProject\vm_fsharp\bin\Debug\Microsoft.Build.Framework.dll
+C:\Users\yura2\Source\Repos\sysProgrammingProject\vm_fsharp\bin\Debug\Microsoft.Build.dll
+C:\Users\yura2\Source\Repos\sysProgrammingProject\vm_fsharp\bin\Debug\System.Reflection.Metadata.dll
+C:\Users\yura2\Source\Repos\sysProgrammingProject\vm_fsharp\bin\Debug\System.Collections.Immutable.dll
+C:\Users\yura2\Source\Repos\sysProgrammingProject\vm_fsharp\bin\Debug\Microsoft.Build.Engine.dll
+C:\Users\yura2\Source\Repos\sysProgrammingProject\vm_fsharp\bin\Debug\ru\FSharp.Build.resources.dll
+C:\Users\yura2\Source\Repos\sysProgrammingProject\vm_fsharp\bin\Debug\ru\FSharp.Compiler.resources.dll
+C:\Users\yura2\Source\Repos\sysProgrammingProject\vm_fsharp\bin\Debug\FSharp.Core.dll
+C:\Users\yura2\Source\Repos\sysProgrammingProject\vm_fsharp\bin\Debug\ru\FSharp.Core.resources.dll

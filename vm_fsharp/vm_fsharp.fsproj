@@ -11,8 +11,9 @@
     <AssemblyName>vm_fsharp</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <TargetFSharpCoreVersion>4.4.0.0</TargetFSharpCoreVersion>
+    <TargetFSharpCoreVersion>4.4.1.0</TargetFSharpCoreVersion>
     <Name>vm_fsharp</Name>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -38,6 +39,15 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FSharp.Build">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Microsoft SDKs\F#\4.1\Framework\v4.0\FSharp.Build.dll</HintPath>
+    </Reference>
+    <Reference Include="FSharp.Compiler">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Microsoft SDKs\F#\4.1\Framework\v4.0\FSharp.Compiler.dll</HintPath>
+    </Reference>
+    <Reference Include="FSharp.Compiler.Interactive.Settings">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Microsoft SDKs\F#\4.1\Framework\v4.0\FSharp.Compiler.Interactive.Settings.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core, Version=$(TargetFSharpCoreVersion), Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <Private>True</Private>
@@ -45,6 +55,9 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.ValueTuple">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Microsoft SDKs\F#\4.1\Framework\v4.0\System.ValueTuple.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />

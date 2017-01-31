@@ -8,11 +8,45 @@
  Some of them not implemented
  </summary>
 </member>
-<member name="M:Exec.execute(Types.Vm)">
+<member name="T:Types.FunctionElementsOffsets">
  <summary>
- Function executes next command of head-context from VM list of contexts
+ Contains offsets for some elements (but not all) in part
+ of byte code which describes Function
  </summary>
- <param name="vm">Virtual machine</param>
+</member>
+<member name="T:Types.ByteCodeOffsets">
+ <summary>
+ Contains offsets for some elements (but not all) in byte code
+ </summary>
+</member>
+<member name="T:Types.Vm">
+ <summary>
+ Describe virtual machine than currently 
+ executing
+ </summary>
+</member>
+<member name="T:Types.VmCtx">
+ <summary>
+ Function context defines current state of execution :
+ local variables and list of commands to execute
+ </summary>
+</member>
+<member name="T:Types.VmValue">
+ <summary>
+ Common value that used in VM
+ </summary>
+</member>
+<member name="T:Types.Function">
+ <summary>
+ Describe function
+ </summary>
+</member>
+<member name="T:Types.SupportedTypes">
+ <summary>
+ Supported types in virtual machine
+ Some of them not used by commands, but VmValue support
+ them, so it's easy to extend VM with commands with corresponding types
+ </summary>
 </member>
 <member name="M:HelpFuncs.getStr``3(Microsoft.FSharp.Collections.FSharpList{System.Tuple{``0,``1,``2}},``0,``1)">
  <summary>
@@ -112,45 +146,11 @@
  <param name="fs">Filestream to read from</param>
  <param name="offset">Offset from begin of stream</param>
 </member>
-<member name="T:Types.FunctionElementsOffsets">
+<member name="M:Exec.execute(Types.Vm)">
  <summary>
- Contains offsets for some elements (but not all) in part
- of byte code which describes Function
+ Function executes next command of head-context from VM list of contexts
  </summary>
-</member>
-<member name="T:Types.ByteCodeOffsets">
- <summary>
- Contains offsets for some elements (but not all) in byte code
- </summary>
-</member>
-<member name="T:Types.Vm">
- <summary>
- Describe virtual machine than currently 
- executing
- </summary>
-</member>
-<member name="T:Types.VmCtx">
- <summary>
- Function context defines current state of execution :
- local variables and list of commands to execute
- </summary>
-</member>
-<member name="T:Types.VmValue">
- <summary>
- Common value that used in VM
- </summary>
-</member>
-<member name="T:Types.Function">
- <summary>
- Describe function
- </summary>
-</member>
-<member name="T:Types.SupportedTypes">
- <summary>
- Supported types in virtual machine
- Some of them not used by commands, but VmValue support
- them, so it's easy to extend VM with commands with corresponding types
- </summary>
+ <param name="vm">Virtual machine</param>
 </member>
 </members>
 </doc>
