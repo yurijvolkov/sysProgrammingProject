@@ -146,8 +146,8 @@ let rec execute (vm : Vm) =
                     | v when v >= 0 -> true
                     | _ -> false
                 | Commands.JLI ->  match ((head vm.dataStack).ToInt32() - (head (Stack.pop vm.dataStack)).ToInt32()) with
-                    | v when v < 0 -> true
-                    | _ -> false
+                        | v when v < 0 -> true
+                        | _ -> false
                 | Commands.JLEI ->  match ((head vm.dataStack).ToInt32() - (head (Stack.pop vm.dataStack)).ToInt32()) with
                     | v when v <= 0 -> true
                     | _ -> false

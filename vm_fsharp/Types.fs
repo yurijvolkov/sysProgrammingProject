@@ -44,8 +44,8 @@ open Commands
             |h :: _ -> Some(h) 
         let push s a = a::s
         let pop = function
-            |[] -> raise (StackError("Pop on empty stack"))
             |h::t -> t
+            |[] -> raise (StackError("Pop on empty stack"))
         let pop2 = function
             |[] -> []
             |h::[] -> []

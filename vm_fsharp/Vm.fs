@@ -6,6 +6,6 @@ open Exec
 
 [<EntryPoint>]
 let main argv = 
-    let vm = vmInit ["tests/fib.vtc"]
+    let vm = vmInit ["tests/test.vtc"]
     execute vm
     0 
